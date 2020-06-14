@@ -90,7 +90,7 @@ const Profile = () => {
                </div >
                <div className="_gallery">
                   {
-                     myPics.slice(0).reverse().map(item => {
+                     myPics.map(item => {
                         return (
                            <img key={item._id} className="_item" src={item.pic} alt="post here" />
                         )

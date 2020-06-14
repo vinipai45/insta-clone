@@ -9,6 +9,7 @@ router.get('/api/allposts', auth, async (req, res) => {
         const posts = await Post.find()
             .populate("postedBy", "_id name pic")
             .populate("comments.commentedBy", "_id name")
+            .sort("-createdAt")
         res.json({ posts })
     } catch (err) {
         console.error("Error", err);
@@ -21,6 +22,7 @@ router.get('/api/myfollowposts', auth, async (req, res) => {
         const posts = await Post.find({ postedBy: { $in: req.user.following } })
             .populate("postedBy", "_id name pic")
             .populate("comments.commentedBy", "_id name")
+            .sort("createdAt")
         res.json({ posts })
     } catch (err) {
         console.error("Error", err);

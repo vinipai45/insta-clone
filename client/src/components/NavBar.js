@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom'
 const NavBar = () => {
    const { state, dispatch } = useContext(UserContext)
    const history = useHistory()
+
    const renderList = () => {
       if (state) {
          return [

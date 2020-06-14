@@ -142,7 +142,7 @@ const FollowedUserPost = () => {
         <div className="_home">
             <>
                 {localStorage.getItem('token') ?
-                    data.slice(0).reverse().map(item => {
+                    data.map(item => {
                         return (
                             <div className="card _homeCard" key={item._id}>
                                 <div className="card-image _postCard">
