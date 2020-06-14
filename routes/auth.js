@@ -4,8 +4,11 @@ const Joi = require('joi')
 const jwt = require('jsonwebtoken')
 const _ = require('lodash')
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const { User, validate } = require("../models/user");
-const { JWT_SECRET } = require("../config/keys");
+const nodemailer = require('nodemailer')
+const sendgridTransport = require('nodemailer-sendgrid-transport')
+const { SENDGRID_API, JWT_SECRET } = require('../config/keys')
 
 function validateLogin(req) {
     const schema = {
@@ -14,6 +17,12 @@ function validateLogin(req) {
     };
     return Joi.validate(req, schema);
 }
+
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: SENDGRID_API
+    }
+}))
 
 router.post('/api/signup', async (req, res) => {
     try {
@@ -35,7 +44,14 @@ router.post('/api/signup', async (req, res) => {
         user.password = await bcrypt.hash(user.password, salt)
 
 
-        await user.save()
+        user.save().then(() => {
+            transporter.sendMail({
+                to: user.email,
+                from: "vinipai45@gmail.com",
+                subject: "signup success",
+                html: "<h1>welcome to instagram</h1>"
+            })
+        })
         return res.json({ success: "Registration Successful" })
     }
     catch (err) {
@@ -71,5 +87,55 @@ router.post('/api/signin', async (req, res) => {
 
 })
 
+router.post('/api/reset-password', (req, res) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err)
+        }
+        const token = buffer.toString("hex")
+        User.findOne({ email: req.body.email })
+            .then(user => {
+                if (!user) {
+                    return res.status(422).json({ error: "There is no user user with this email" })
+                }
+                user.resetToken = token
+                user.expireToken = Date.now() + 3600000
+                user.save().then((result) => {
+                    transporter.sendMail({
+                        to: user.email,
+                        from: "vinipai45@gmail.com",
+                        subject: "password reset",
+                        html: `
+                    <p>You requested for password reset</p>
+                    <h5>click <a href="http://localhost:3000/api/reset/${token}">here</a> to reset password</h5>
+                    `
+                    })
+                    return res.json({ message: "check your email" })
+                })
+
+            })
+    })
+})
+
+router.post('/api/new-password', (req, res) => {
+    const newPassword = req.body.password
+    const sentToken = req.body.token
+    User.findOne({ resetToken: sentToken, expireToken: { $gt: Date.now() } })
+        .then(user => {
+            if (!user) {
+                return res.status(422).json({ error: "Session Expired! try again" })
+            }
+            bcrypt.hash(newPassword, 12).then(hashedpassword => {
+                user.password = hashedpassword
+                user.resetToken = undefined
+                user.expireToken = undefined
+                user.save().then((saveduser) => {
+                    res.json({ message: "Password updated!" })
+                })
+            })
+        }).catch(err => {
+            console.error("Error", err)
+        })
+})
 
 module.exports = router

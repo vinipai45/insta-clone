@@ -1,24 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom'
-import { UserContext } from '../../App'
-import M from 'materialize-css'
 import Swal from 'sweetalert2'
 
 const SignIn = () => {
-    const { state, dispatch } = useContext(UserContext)
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
     const history = useHistory()
 
     const PostData = () => {
-        fetch("/api/signin", {
+        fetch("/api/reset-password", {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 email,
-                password
             })
         }).then(res => res.json())
             .then(data => {
@@ -32,17 +27,14 @@ const SignIn = () => {
                     })
                 }
                 else {
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('user', JSON.stringify(data.user))
-                    dispatch({ type: "USER", payload: data.user })
                     Swal.fire({
                         position: 'top-end',
-                        icon: 'success',
-                        title: data.success,
+                        icon: 'info',
+                        title: data.message,
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    history.push("/")
+                    history.push("/api/signin")
                 }
             }).catch(err => console.error("Error", err))
             .catch(err => console.error("Error", err))
@@ -62,21 +54,9 @@ const SignIn = () => {
                     <label htmlFor="email">Email</label>
                 </div>
 
-                {/* Password */}
-                <div className="input-field _myInput">
-                    <input id="password" type="password" className="validate" autoComplete="off"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <label htmlFor="password">Password </label>
-                </div>
                 <button onClick={() => PostData()} className="btn waves-effect waves-light black">
-                    LOGIN <i className="material-icons right">login</i>
+                    verify <i className="material-icons right">verified</i>
                 </button>
-                <br /><br />
-                <Link to='/api/reset'>Forgot password?</Link>
-                <br /><br />
-                <Link to='/api/signup'>Don't have an account?</Link>
 
             </div>
         </div>

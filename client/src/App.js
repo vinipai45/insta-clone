@@ -8,6 +8,8 @@ import Profile from './components/screens/Profile'
 import SignIn from './components/screens/SignIn'
 import CreatePost from './components/screens/CreatePost'
 import UserProfile from './components/screens/UserProfile'
+import Reset from './components/screens/Reset'
+import NewPassword from './components/screens/NewPassword'
 import { reducer, initialState } from './reducers/userReducer'
 import FollowedUserPost from './components/screens/FollowedUserPosts';
 
@@ -22,7 +24,10 @@ const Routing = () => {
     if (user) {
       dispatch({ type: "USER", payload: user })
     }
-    else history.push('/api/signin')
+    else {
+      if (!history.location.pathname.startsWith('/api/reset'))
+        history.push('/api/signin')
+    }
   }, [])
 
   return (
@@ -47,6 +52,12 @@ const Routing = () => {
       </Route>
       <Route exact path="/api/myfollowposts">
         <FollowedUserPost />
+      </Route>
+      <Route exact path="/api/reset">
+        <Reset />
+      </Route>
+      <Route exact path="/api/reset/:token">
+        <NewPassword />
       </Route>
     </Switch>
   )

@@ -51,7 +51,13 @@ const Signup = () => {
         }).then(res => res.json())
             .then(data => {
                 if (data.error) {
-                    M.toast({ html: data.error, classes: 'rounded red darken-3' })
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: data.error,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
                 else {
                     Swal.fire({

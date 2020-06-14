@@ -35,6 +35,8 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "https://res.cloudinary.com/vinipai45/image/upload/v1591981247/default-avatar_oefekd.png"
     },
+    resetToken: String,
+    expireToken: Date,
     followers: [{ type: ObjectId, ref: "User" }],
     following: [{ type: ObjectId, ref: "User" }]
 })
