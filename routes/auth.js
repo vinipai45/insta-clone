@@ -42,22 +42,42 @@ router.post('/api/signup', async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt)
-
-
-        user.save().then(() => {
+        crypto.randomBytes(32, async (err, buffer) => {
+            if (err) {
+                console.log(err)
+            }
+            const token = buffer.toString("hex")
+            user.confirmToken = token
+            user.expireConfirmToken = Date.now() + 3600000
+            await user.save()
             transporter.sendMail({
                 to: user.email,
                 from: "vinipai45@gmail.com",
-                subject: "signup success",
-                html: "<h1>welcome to instagram</h1>"
+                subject: "Confirm email",
+                html: `<h1>welcome to insta-clone</h1>
+                        <a href="http://localhost:3000/api/confirm/${token}">Click here to confirm your Account</a>
+                        `
             })
         })
-        return res.json({ success: "Registration Successful" })
+        return res.json({ info: "Check mail" })
     }
     catch (err) {
         console.error("Error", err);
     }
 
+})
+
+router.post('/api/confirm', async (req, res) => {
+    const sentToken = req.body.token
+    User.findOne({ confirmToken: sentToken, expireConfirmToken: { $gt: Date.now() } })
+        .then(user => {
+            if (!user) {
+                return res.status(422).json({ error: "Session Expired! try again" })
+            }
+            user.confirmed = true;
+            user.save().then(() => { return res.json({ message: "Email Verified" }) })
+
+        })
 })
 
 router.post('/api/signin', async (req, res) => {
@@ -67,6 +87,7 @@ router.post('/api/signin', async (req, res) => {
 
         let user = await User.findOne({ email: req.body.email })
         if (!user) return res.status(400).json({ error: "Invalid Username or Password" })
+        if (!user.confirmed) return res.status(422).json({ info: "Please confirm your email" })
 
         const result = await bcrypt.compare(req.body.password, user.password)
         if (!result) return res.status(400).json({ error: "Invalid Username or Password" })

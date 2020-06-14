@@ -1,19 +1,19 @@
-import React, { useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom'
+import React from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
-const Reset = () => {
-    const [email, setEmail] = useState("")
+const ConfirmSignIn = () => {
     const history = useHistory()
+    const { token } = useParams()
 
     const PostData = () => {
-        fetch("/api/reset-password", {
+        fetch(`/api/confirm`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email,
+                token,
             })
         }).then(res => res.json())
             .then(data => {
@@ -44,16 +44,6 @@ const Reset = () => {
         <div className="mycard">
             <div className="card _authCard">
                 <h2 className="_logo">Instagram</h2>
-
-                {/* Email */}
-                <div className="input-field _myInput">
-                    <input id="email" type="email" className="validate" autoComplete="off"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label htmlFor="email">Email</label>
-                </div>
-
                 <button onClick={() => PostData()} className="btn waves-effect waves-light black">
                     verify <i className="material-icons right">verified</i>
                 </button>
@@ -63,4 +53,4 @@ const Reset = () => {
     )
 }
 
-export default Reset
+export default ConfirmSignIn

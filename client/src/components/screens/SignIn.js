@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom'
 import { UserContext } from '../../App'
-import M from 'materialize-css'
 import Swal from 'sweetalert2'
 
 const SignIn = () => {
@@ -27,6 +26,15 @@ const SignIn = () => {
                         position: 'top-end',
                         icon: 'error',
                         title: data.error,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+                else if (data.info) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'info',
+                        title: data.info,
                         showConfirmButton: false,
                         timer: 1500
                     })

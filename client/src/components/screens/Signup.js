@@ -62,8 +62,8 @@ const Signup = () => {
                 else {
                     Swal.fire({
                         position: 'top-end',
-                        icon: 'success',
-                        title: data.success,
+                        icon: 'info',
+                        title: data.info,
                         showConfirmButton: false,
                         timer: 1500
                     })

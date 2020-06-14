@@ -10,6 +10,7 @@ import CreatePost from './components/screens/CreatePost'
 import UserProfile from './components/screens/UserProfile'
 import Reset from './components/screens/Reset'
 import NewPassword from './components/screens/NewPassword'
+import ConfirmSignIn from './components/screens/ConfirmSignIn'
 import { reducer, initialState } from './reducers/userReducer'
 import FollowedUserPost from './components/screens/FollowedUserPosts';
 
@@ -25,8 +26,9 @@ const Routing = () => {
       dispatch({ type: "USER", payload: user })
     }
     else {
-      if (!history.location.pathname.startsWith('/api/reset'))
+      if (!(history.location.pathname.startsWith('/api/reset') || history.location.pathname.startsWith('/api/confirm')))
         history.push('/api/signin')
+
     }
   }, [])
 
@@ -58,6 +60,9 @@ const Routing = () => {
       </Route>
       <Route exact path="/api/reset/:token">
         <NewPassword />
+      </Route>
+      <Route exact path="/api/confirm/:token">
+        <ConfirmSignIn />
       </Route>
     </Switch>
   )

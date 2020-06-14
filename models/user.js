@@ -37,6 +37,14 @@ const userSchema = mongoose.Schema({
     },
     resetToken: String,
     expireToken: Date,
+
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
+    confirmToken: String,
+    expireConfirmToken: Date,
+
     followers: [{ type: ObjectId, ref: "User" }],
     following: [{ type: ObjectId, ref: "User" }]
 })
