@@ -68,5 +68,12 @@ router.put('/api/updatepic', auth, (req, res) => {
         })
 })
 
+router.post('/api/search-users', (req, res) => {
+    let userPattern = new RegExp('.*' + req.body.query + '.*', 'i')
+    User.find({ name: { $regex: userPattern } }).select("_id name email pic")
+        .then(user => {
+            return res.json({ user })
+        }).catch(err => console.error("Error", err))
+})
 
 module.exports = router

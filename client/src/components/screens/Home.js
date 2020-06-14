@@ -179,7 +179,7 @@ const Home = () => {
                         <div className="card-image _postCard">
                            <h6 style={{ display: "float" }} className="_nameOnCard">
 
-                              <Link to={item.postedBy._id !== state._id ? `/api/userprofile/${item.postedBy._id}` : `/api/profile`}><img className="_postAvatar" src={item.postedBy.pic} alt="profile here" /></Link>
+                              <Link to={item.postedBy._id !== state._id ? `/api/userprofile/${item.postedBy._id}` : `/api/profile`}><img className="_postAvatar circle" src={item.postedBy.pic} alt="profile here" /></Link>
                               <Link to={item.postedBy._id !== state._id ? `/api/userprofile/${item.postedBy._id}` : `/api/profile`}>{item.postedBy.name}</Link>
 
                               {
