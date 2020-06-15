@@ -8,7 +8,7 @@ const crypto = require('crypto')
 const { User, validate } = require("../models/user");
 const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
-const { SENDGRID_API, JWT_SECRET } = require('../config/keys')
+const { SENDGRID_API, JWT_SECRET, EMAIL } = require('../config/keys')
 
 function validateLogin(req) {
     const schema = {
@@ -55,7 +55,7 @@ router.post('/api/signup', async (req, res) => {
                 from: "vinipai45@gmail.com",
                 subject: "Confirm email",
                 html: `<h1>welcome to insta-clone</h1>
-                        <a href="http://localhost:3000/api/confirm/${token}">Click here to confirm your Account</a>
+                        <a href="${EMAIL}/api/confirm/${token}">Click here to confirm your Account</a>
                         `
             })
         })
@@ -128,7 +128,7 @@ router.post('/api/reset-password', (req, res) => {
                         subject: "password reset",
                         html: `
                     <p>You requested for password reset</p>
-                    <h5>click <a href="http://localhost:3000/api/reset/${token}">here</a> to reset password</h5>
+                    <h5>click <a href="${EMAIL}/api/reset/${token}">here</a> to reset password</h5>
                     `
                     })
                     return res.json({ message: "check your email" })
