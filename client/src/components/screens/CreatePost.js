@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
-import M from 'materialize-css'
+import Swal from 'sweetalert2'
 
 const CreatePost = () => {
     const history = useHistory()
@@ -25,10 +25,22 @@ const CreatePost = () => {
             }).then(res => res.json())
                 .then(data => {
                     if (data.error) {
-                        M.toast({ html: data.error, classes: "red darken-3" })
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: data.error,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                     else {
-                        M.toast({ html: "Created post Successfully", classes: "green darken-1" })
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'sucess',
+                            title: "Post Successful",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                         history.push('/')
                     }
                 }).catch(err => {
