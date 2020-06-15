@@ -17,7 +17,7 @@ const NavBar = () => {
    const renderList = () => {
       if (state) {
          return [
-            <li key="1"><i className="material-icons modal-trigger" data-target="modal1" style={{ cursor: "pointer", color: "black" }}>search</i></li>,
+            <li key="1"><i className="material-icons modal-trigger" data-target="modal1" style={{ cursor: "pointer", color: "black", marginLeft: "27px" }}>search</i></li>,
             <li key="2"><Link to="/api/myfollowposts">My Following</Link></li>,
             <li key="3"><Link to="/api/profile">Profile</Link></li>,
             <li key="4"><Link to="/api/createpost">Create Post</Link></li>,
@@ -85,8 +85,8 @@ const NavBar = () => {
          </ul>
 
          {/* MODAL ON SEARCH */}
-         <div ref={searchModal} id="modal1" class="modal">
-            <div class="modal-content">
+         <div ref={searchModal} id="modal1" className="modal">
+            <div className="modal-content">
                <div className="input-field _myInput">
                   <input id="user" type="text" className="validate" autoComplete="off"
                      value={search}
@@ -96,16 +96,16 @@ const NavBar = () => {
                </div>
 
                {/* COLLECTION IN MODAL */}
-               <ul class="collection">
+               <ul className="collection">
                   {userDetails.map(item => {
                      return (
-                        <li class="collection-item avatar">
+                        <li key="8" className="collection-item avatar">
                            <Link to={item._id !== state._id ? "/api/userprofile/" + item._id : "/api/profile"} onClick={() => {
                               M.Modal.getInstance(searchModal.current).close()
                               setSearch("")
                            }}>
-                              <img src={item.pic} alt="" class="circle" />
-                              <span class="title">{item.name}</span>
+                              <img src={item.pic} alt="" className="circle" />
+                              <span className="title">{item.name}</span>
                               <p>{item.email}</p>
                            </Link>
                         </li>

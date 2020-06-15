@@ -104,10 +104,10 @@ const Profile = () => {
          {state ?
             <>
                {userProfile ?
-                  <div style={{ maxWidth: "700px", margin: "0px auto" }}>
+                  <div className="_container">
                      <div className="_profileDetails">
                         <div className="">
-                           <img style={{ width: "160px", height: "160px", borderRadius: "50%", marginBottom: "10px", border: "2px solid #000" }}
+                           <img style={{ width: "140px", height: "140px", borderRadius: "50%", marginBottom: "10px", border: "2px solid #000" }}
                               src={userProfile.user.pic}
                               alt="profile here"
                            />
@@ -115,7 +115,7 @@ const Profile = () => {
                         <div>
                            <h4>{userProfile.user.name}</h4>
                            <h6>{userProfile.user.email}</h6>
-                           <div style={{ display: "flex", justifyContent: "space-between", width: "120%" }}>
+                           <div style={{ display: "flex", justifyContent: "space-evenly", width: "120%" }}>
                               <h6>{userProfile.posts.length} Posts</h6>
                               <h6>{userProfile.user.followers.length} Followers</h6>
                               <h6>{userProfile.user.following.length} Following</h6>

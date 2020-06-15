@@ -63,10 +63,12 @@ const Profile = () => {
    return (
       <>
          {state ?
-            <div style={{ maxWidth: "700px", margin: "0px auto" }}>
+            <div className="_container">
                <div className="_profileDetails">
                   <div>
-                     <img style={{ width: "150px", height: "150px", borderRadius: "50%", marginBottom: "10px", border: "2px solid #000" }}
+                     <img style={{
+                        width: "140px", height: "140px", borderRadius: "50%", marginBottom: "10px", border: "2px solid #000"
+                     }}
                         src={state ? state.pic : <div class="lds-ripple"><div></div><div></div></div>}
                         alt="profile here"
                      />
@@ -81,7 +83,7 @@ const Profile = () => {
                   </div>
                   <div>
                      <h4>{state ? state.name : "loading"}</h4>
-                     <div style={{ display: "flex", justifyContent: "space-between", width: "120%" }}>
+                     <div style={{ display: "flex", justifyContent: "space-evenly", width: "120%" }}>
                         <h6>{myPics.length} Posts</h6>
                         <h6>{state ? state.followers.length : <div class="lds-ripple"><div></div><div></div></div>} Followers</h6>
                         <h6>{state ? state.following.length : <div class="lds-ripple"><div></div><div></div></div>} Following</h6>
