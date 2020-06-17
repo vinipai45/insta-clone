@@ -93,7 +93,7 @@ router.post('/api/signin', async (req, res) => {
         if (!result) return res.status(400).json({ error: "Invalid Username or Password" })
 
         const { _id, name, email, pic, followers, following } = user
-        const token = jwt.sign({ _id: user._id }, JWT_SECRET)
+        const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: 10 })
         if (token) {
             return res.json({ success: "Login Successful!", token, user: { _id, name, email, pic, followers, following } })
         }

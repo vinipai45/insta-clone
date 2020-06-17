@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../App'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 const Profile = () => {
@@ -8,6 +8,7 @@ const Profile = () => {
    const { state, dispatch } = useContext(UserContext)
    const { userId } = useParams()
    const [showFollow, setShowFollow] = useState(state ? !state.following.includes(userId) : true)
+   const history = useHistory()
 
    useEffect(() => {
       fetch(`/api/userprofile/${userId}`, {
@@ -16,6 +17,17 @@ const Profile = () => {
          }
       }).then(res => res.json())
          .then(result => {
+            if (result.error) {
+               Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "Sesison Expired!",
+                  text: "Please Login Again!",
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+               history.push('/api/signin')
+            }
             setProfile(result)
          }).catch(err => console.error("Error", err))
          .catch(err => console.error("Error", err))

@@ -6,11 +6,13 @@ const auth = function (req, res, next) {
     try {
         const { authorization } = req.headers
         if (!authorization) {
+            console.log("no authorization")
             return res.status(401).json({ error: "Access Denied" })
         }
         jwt.verify(authorization, JWT_SECRET, (err, payload) => {
             if (err) {
-                return res.status(401).json({ error: "Access Denied" })
+                console.log("not verified")
+                return res.status(401).json({ error: "Session Expired!" })
             }
             const { _id } = payload
             User.findById(_id).then(userdata => {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { UserContext } from '../../App'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 const Home = () => {
    const [data, setData] = useState([])
    const { state, dispatch } = useContext(UserContext)
-
+   const history = useHistory()
    useEffect(() => {
       fetch('/api/allposts', {
          headers: {
@@ -14,8 +14,17 @@ const Home = () => {
          }
       }).then(res => res.json())
          .then(result => {
-            console.log(result);
-
+            if (result.error) {
+               Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "Sesison Expired!",
+                  text: "Please Login Again!",
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+               history.push('/api/signin')
+            }
             setData(result.posts)
          }).catch(err => {
             console.error("Error", err);

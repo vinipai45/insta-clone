@@ -27,8 +27,9 @@ const CreatePost = () => {
                     if (data.error) {
                         Swal.fire({
                             position: 'top-end',
-                            icon: 'error',
+                            icon: 'info',
                             title: data.error,
+                            text: "Please Login Again",
                             showConfirmButton: false,
                             timer: 1500
                         })
@@ -61,6 +62,16 @@ const CreatePost = () => {
         })
             .then(res => res.json())
             .then(data => {
+                console.log(data)
+                if (data.error) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: data.error.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
                 setUrl(data.url)
             })
             .catch(err => {

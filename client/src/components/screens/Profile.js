@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../App'
+import { useHistory } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 const Profile = () => {
    const [myPics, setPics] = useState([])
    const { state, dispatch } = useContext(UserContext)
    const [image, setImage] = useState("")
+   const history = useHistory()
 
    useEffect(() => {
       fetch("/api/myposts", {
@@ -13,6 +16,17 @@ const Profile = () => {
          }
       }).then(res => res.json())
          .then(result => {
+            if (result.error) {
+               Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "Sesison Expired!",
+                  text: "Please Login Again!",
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+               history.push('/api/signin')
+            }
             setPics(result.myposts)
          }).catch(err => console.error("Error", err))
          .catch(err => console.error("Error", err))
@@ -30,7 +44,16 @@ const Profile = () => {
          })
             .then(res => res.json())
             .then(data => {
-
+               if (data.error) {
+                  Swal.fire({
+                     position: 'top-end',
+                     icon: 'error',
+                     title: 'Something went wrong',
+                     text: "Please try again",
+                     showConfirmButton: false,
+                     timer: 1500
+                  })
+               }
 
                fetch('/api/updatepic', {
                   method: "put",
@@ -43,7 +66,16 @@ const Profile = () => {
                   })
                }).then(res => res.json())
                   .then(result => {
-                     console.log(result)
+                     if (result.error) {
+                        Swal.fire({
+                           position: 'top-end',
+                           icon: 'info',
+                           title: data.error,
+                           text: "Please Login Again",
+                           showConfirmButton: false,
+                           timer: 1500
+                        })
+                     }
                      localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }))
                      dispatch({ type: "UPDATEPIC", payload: result.pic })
                      //window.location.reload()
